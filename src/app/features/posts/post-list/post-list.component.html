@@ -120,3 +120,56 @@
     </div>
   </div>
 </div>
+
+<!-- Modal de Confirmación de Eliminación -->
+@if (showDeleteModal && postToDelete) {
+  <div class="modal-overlay" (click)="onBackdropClick($event)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-icon">
+            <i class="fas fa-exclamation-triangle"></i> 
+          </div>
+          <h4 class="modal-title">&nbsp; Confirmar Eliminación</h4>
+        </div>
+        
+        <div class="modal-body">
+          <p class="confirmation-text">
+            ¿Estás seguro de que quieres eliminar la siguiente publicación?
+          </p>
+          <div class="post-preview">
+            <h5 class="post-preview-title">
+              <i class="fas fa-quote-left"></i>
+              {{ postToDelete.title }}
+            </h5>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button 
+            type="button" 
+            class="btn btn-cancel" 
+            (click)="cancelDelete()"
+            [disabled]="isDeleting">
+            <i class="fas fa-times me-1"></i>
+            Cancelar
+          </button>
+          <button 
+            type="button" 
+            class="btn btn-delete" 
+            (click)="confirmDelete()"
+            [disabled]="isDeleting">
+            @if (isDeleting) {
+              <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Eliminando...
+            } @else {
+              <i class="fas fa-trash me-1"></i>
+              Eliminar
+            }
+          </button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+}

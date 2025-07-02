@@ -16,6 +16,11 @@ export class PostListComponent implements OnInit, OnDestroy {
   loading = false;
   private destroy$ = new Subject<void>();
 
+  // Propiedades para el modal de confirmación
+  showDeleteModal = false;
+  postToDelete: Post | null = null;
+  isDeleting = false;
+
   constructor(private postService: PostService) { }
 
   ngOnInit(): void {
@@ -59,31 +64,44 @@ export class PostListComponent implements OnInit, OnDestroy {
     alert('Navegando al formulario de creación');
   }
 
+  // Método modificado para mostrar el modal
   onDelete(postId: number): void {
     const post = this.posts.find(p => p.id === postId);
-    const confirmMessage = post 
-      ? `¿Estás seguro de que quieres eliminar la publicación "${post.title}"?`
-      : '¿Estás seguro de que quieres eliminar esta publicación?';
-
-    if (confirm(confirmMessage)) {
-      this.deletePost(postId);
+    if (post) {
+      this.postToDelete = post;
+      this.showDeleteModal = true;
     }
   }
 
+  // Confirmar eliminación
+  confirmDelete(): void {
+    if (this.postToDelete) {
+      this.deletePost(this.postToDelete.id);
+    }
+  }
+
+  // Cancelar eliminación
+  cancelDelete(): void {
+    this.showDeleteModal = false;
+    this.postToDelete = null;
+  }
+
   private deletePost(postId: number): void {
-    this.loading = true;
+    this.isDeleting = true;
     
     this.postService.deletePost(postId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           this.posts = this.posts.filter(p => p.id !== postId);
-          this.loading = false;
+          this.isDeleting = false;
+          this.showDeleteModal = false;
+          this.postToDelete = null;
           alert('Publicación eliminada exitosamente');
         },
         error: (error) => {
           console.error('Error deleting post:', error);
-          this.loading = false;
+          this.isDeleting = false;
           alert('Error al eliminar la publicación. Por favor, intenta de nuevo.');
         }
       });
@@ -91,6 +109,13 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   onRefresh(): void {
     this.loadPosts();
+  }
+
+  // Método para cerrar modal al hacer clic en el backdrop
+  onBackdropClick(event: Event): void {
+    if (event.target === event.currentTarget && !this.isDeleting) {
+      this.cancelDelete();
+    }
   }
 }
 
