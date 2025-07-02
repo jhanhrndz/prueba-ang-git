@@ -1,1 +1,122 @@
-<p>post-list works!</p>
+<!-- post-list.component.html -->
+<div class="post-list-container">
+  <div class="container">
+    <!-- Card principal que contiene todo -->
+    <div class="card main-content-card">
+      
+      <!-- Header integrado -->
+      <div class="integrated-header d-flex justify-content-between align-items-center flex-wrap">
+        <h2 class="header-title mb-0">
+          <i class="fas fa-newspaper"></i>
+          Publicaciones
+        </h2>
+        <button class="btn btn-create" (click)="onCreateNew()">
+          <i class="fas fa-plus me-1"></i>
+          Nueva Publicación
+        </button>
+      </div>
+
+      <!-- Stats section -->
+      @if (!loading && posts.length > 0) {
+        <div class="stats-section">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="stats-item">
+                <i class="fas fa-file-alt"></i>
+                Total de publicaciones: <span class="fw-bold">{{ posts.length }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Loading -->
+      @if (loading) {
+        <div class="loading-section">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <div>
+            <i class="fas fa-hourglass-half me-2"></i>
+            Cargando publicaciones...
+          </div>
+        </div>
+      }
+
+      <!-- Posts section -->
+      @if (!loading && posts.length > 0) {
+        <div class="posts-section">
+          @for (post of posts; track post.id) {
+            <div class="post-item">
+              
+              <!-- Post Header -->
+              <div class="post-header d-flex justify-content-between align-items-center flex-wrap">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="post-id">
+                    ID: {{ post.id }}
+                  </span>
+                  <span class="user-badge">
+                    <i class="fas fa-user"></i> Usuario {{ post.userId }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Post Body -->
+              <div class="post-body-section">
+                <h5 class="post-title">
+                  <i class="fas fa-quote-left"></i>
+                  {{ post.title }}
+                </h5>
+                <p class="post-content mb-0">{{ post.body }}</p>
+              </div>
+
+              <!-- Post Actions -->
+              <div class="post-actions">
+                <div class="d-flex justify-content-end gap-2 flex-wrap">
+                  <button 
+                    class="btn btn-outline-info btn-sm" 
+                    (click)="onView(post)"
+                    title="Ver detalles">
+                    <i class="fas fa-eye me-1"></i> Ver
+                  </button>
+                  <button 
+                    class="btn btn-outline-warning btn-sm" 
+                    (click)="onEdit(post)"
+                    title="Editar publicación">
+                    <i class="fas fa-edit me-1"></i> Editar
+                  </button>
+                  <button 
+                    class="btn btn-outline-danger btn-sm" 
+                    (click)="onDelete(post.id)"
+                    title="Eliminar publicación">
+                    <i class="fas fa-trash me-1"></i> Eliminar
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Empty State -->
+      @if (!loading && posts.length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i class="fas fa-inbox"></i>
+          </div>
+          <h4 class="mb-3">No hay publicaciones disponibles</h4>
+          <p class="mb-4">
+            Parece que aún no hay contenido para mostrar.<br>
+            ¡Sé el primero en crear una publicación!
+          </p>
+          <button class="btn btn-create-first btn-lg" (click)="onCreateNew()">
+            <i class="fas fa-plus me-2"></i>
+            Crear Primera Publicación
+          </button>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
