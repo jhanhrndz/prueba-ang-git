@@ -1,10 +1,6 @@
-<!-- post-list.component.html -->
 <div class="post-list-container">
   <div class="container">
-    <!-- Card principal que contiene todo -->
     <div class="card main-content-card">
-      
-      <!-- Header integrado -->
       <div class="integrated-header d-flex justify-content-between align-items-center flex-wrap">
         <h2 class="header-title mb-0">
           <i class="fas fa-newspaper"></i>
@@ -16,7 +12,6 @@
         </button>
       </div>
 
-      <!-- Stats section -->
       @if (!loading && posts.length > 0) {
         <div class="stats-section">
           <div class="row">
@@ -49,7 +44,6 @@
           @for (post of posts; track post.id) {
             <div class="post-item">
               
-              <!-- Post Header -->
               <div class="post-header d-flex justify-content-between align-items-center flex-wrap">
                 <div class="d-flex align-items-center gap-2">
                   <span class="post-id">
@@ -61,7 +55,6 @@
                 </div>
               </div>
 
-              <!-- Post Body -->
               <div class="post-body-section">
                 <h5 class="post-title">
                   <i class="fas fa-quote-left"></i>
@@ -70,7 +63,6 @@
                 <p class="post-content mb-0">{{ post.body }}</p>
               </div>
 
-              <!-- Post Actions -->
               <div class="post-actions">
                 <div class="d-flex justify-content-end gap-2 flex-wrap">
                   <button 

@@ -73,6 +73,7 @@ export class PostNewComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.error = 'No se pudieron cargar los usuarios';
+          this.toast.show('error', 'No se pudieron cargar los usuarios.');
           this.usersLoading = false;
           this.setUserIdDisabledState();
         }

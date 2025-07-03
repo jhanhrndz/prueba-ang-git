@@ -1,4 +1,3 @@
-<!-- post-detail.component.html -->
 <div class="post-detail-container">
   <div class="container">
     <!-- Card principal -->
@@ -43,7 +42,6 @@
       <!-- Post Content -->
       @if (post && !loading && !error) {
       <div class="post-content-section">
-        <!-- Post Meta Information -->
         <div class="post-meta">
           <div class="meta-item">
             <i class="fas fa-hashtag"></i>
@@ -71,14 +69,12 @@
           </div>
         </div>
 
-        <!-- Post Title Section -->
         <div class="post-title-section">
           <h1 class="post-title">
             {{ post.title }}
           </h1>
         </div>
 
-        <!-- Post Body Section -->
         <div class="post-body-section">
           <div class="body-content">
             <div class="content-text">
