@@ -5,6 +5,7 @@ import { PostService } from '../../../core/services/posts/post.service';
 import { Post, UpdatePostRequest } from '../../../core/interfaces/post.interface';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule, Location } from '@angular/common';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-post-edit',
@@ -25,7 +26,8 @@ export class PostEditComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private postService: PostService,
     private router: Router, 
-    private location: Location
+    private location: Location,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +48,7 @@ export class PostEditComponent implements OnInit, OnDestroy {
   private initForm(): void {
     this.postForm = this.fb.group({
       userId: [{ value: '', disabled: false }, [Validators.required]],
-      title: ['', [Validators.required]],
+      title: ['', [Validators.required, Validators.minLength(3)]],
       body: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
@@ -66,6 +68,7 @@ export class PostEditComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.error = 'No se pudo cargar la publicación';
+          this.toast.show('error', 'No se pudo cargar la publicación');
           this.loading = false;
         }
       });
@@ -96,10 +99,12 @@ export class PostEditComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.loading = false;
+          this.toast.show('success', '¡Se edito la pubicación correctamente!');
           this.goBack();
         },
         error: () => {
           this.error = 'No se pudo actualizar la publicación';
+          this.toast.show('error', 'NO se pudo actualizar la publicación.');
           this.loading = false;
         }
       });

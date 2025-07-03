@@ -7,6 +7,7 @@ import { CreatePostRequest } from '../../../core/interfaces/post.interface';
 import { User } from '../../../core/interfaces/user.interface';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule, Location } from '@angular/common';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-post-new',
@@ -28,7 +29,8 @@ export class PostNewComponent implements OnInit, OnDestroy {
     private postService: PostService,
     private userService: UserService,
     private router: Router,
-    private location: Location
+    private location: Location,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +46,7 @@ export class PostNewComponent implements OnInit, OnDestroy {
   private initForm(): void {
     this.postForm = this.fb.group({
       userId: ['', [Validators.required]],
-      title: ['', [Validators.required]],
+      title: ['', [Validators.required, Validators.minLength(3)]],
       body: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
@@ -60,6 +62,7 @@ export class PostNewComponent implements OnInit, OnDestroy {
         },
         error: () => {
           this.error = 'No se pudieron cargar los usuarios';
+          this.toast.show('error', 'No se pudieron cargar los usuarios');
           this.usersLoading = false;
         }
       });
@@ -89,10 +92,12 @@ export class PostNewComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.loading = false;
+          this.toast.show('success', '¡Se creó la publicación correctamente!');
           this.router.navigate(['/lists-posts']);
         },
         error: () => {
           this.error = 'No se pudo crear la publicación';
+          this.toast.show('error', 'No se pudo crear la publicación');
           this.loading = false;
         }
       });
