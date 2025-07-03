@@ -45,25 +45,36 @@ export class PostNewComponent implements OnInit, OnDestroy {
 
   private initForm(): void {
     this.postForm = this.fb.group({
-      userId: ['', [Validators.required]],
-      title: ['', [Validators.required, Validators.minLength(3)]],
+      userId: [{ value: '', disabled: false }, [Validators.required]],
+      title: ['', [Validators.required, Validators.minLength(5)]],
       body: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
+  private setUserIdDisabledState(): void {
+    const userIdControl = this.postForm.get('userId');
+    if (this.usersLoading || this.loading) {
+      userIdControl?.disable({ emitEvent: false });
+    } else {
+      userIdControl?.enable({ emitEvent: false });
+    }
+  }
+
   private loadUsers(): void {
     this.usersLoading = true;
+    this.setUserIdDisabledState();
     this.userService.getUsers()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (users) => {
           this.users = users;
           this.usersLoading = false;
+          this.setUserIdDisabledState();
         },
         error: () => {
           this.error = 'No se pudieron cargar los usuarios';
-          this.toast.show('error', 'No se pudieron cargar los usuarios');
           this.usersLoading = false;
+          this.setUserIdDisabledState();
         }
       });
   }
@@ -82,6 +93,7 @@ export class PostNewComponent implements OnInit, OnDestroy {
       return;
     }
     this.loading = true;
+    this.setUserIdDisabledState();
     const newPost: CreatePostRequest = {
       userId: this.postForm.value.userId,
       title: this.postForm.value.title,
@@ -92,13 +104,15 @@ export class PostNewComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.loading = false;
-          this.toast.show('success', '¡Se creó la publicación correctamente!');
+          this.setUserIdDisabledState();
+          this.toast.show('success', '¡Se creo correctamente la publicación!');
           this.router.navigate(['/lists-posts']);
         },
         error: () => {
           this.error = 'No se pudo crear la publicación';
-          this.toast.show('error', 'No se pudo crear la publicación');
+          this.toast.show('error', 'No se pudo crear la publicación.');
           this.loading = false;
+          this.setUserIdDisabledState();
         }
       });
   }

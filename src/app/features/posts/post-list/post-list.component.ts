@@ -4,6 +4,7 @@ import { Subject, takeUntil, map } from 'rxjs';
 import { Post } from '../../../core/interfaces/post.interface';
 import { PostService } from '../../../core/services/posts/post.service';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../shared/components/toast/toast.service';
 
 @Component({
   selector: 'app-post-list',
@@ -21,7 +22,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   postToDelete: Post | null = null;
   isDeleting = false;
 
-  constructor(private postService: PostService, private ruta: Router) { }
+  constructor(private postService: PostService, private ruta: Router, private toast: ToastService) { }
 
   ngOnInit(): void {
     this.loadPosts();
@@ -47,7 +48,7 @@ export class PostListComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error loading posts:', error);
           this.loading = false;
-          alert('Error al cargar las publicaciones. Por favor, intenta de nuevo.');
+          this.toast.show('error', 'No se pudo cargar las publicaciones. Por favor, intente nuevamente.');
         }
       });
   }
@@ -94,12 +95,12 @@ export class PostListComponent implements OnInit, OnDestroy {
           this.isDeleting = false;
           this.showDeleteModal = false;
           this.postToDelete = null;
-          alert('Publicación eliminada exitosamente');
+          this.toast.show('success', '¡Publicación eliminada correctamente!');
         },
         error: (error) => {
           console.error('Error deleting post:', error);
           this.isDeleting = false;
-          alert('Error al eliminar la publicación. Por favor, intenta de nuevo.');
+          this.toast.show('error', 'No se pudo eliminar la publicación. Por favor, intente nuevamente.');
         }
       });
   }

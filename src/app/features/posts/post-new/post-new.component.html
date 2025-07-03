@@ -38,8 +38,7 @@
                 <select
                   id="userId"
                   class="form-control"
-                  formControlName="userId"
-                  [disabled]="usersLoading || loading">
+                  formControlName="userId">
                   <option value="">Seleccione un usuario</option>
                   <option *ngFor="let user of users" [value]="user.id">
                      {{ user.id }} - {{ user.name }} 
