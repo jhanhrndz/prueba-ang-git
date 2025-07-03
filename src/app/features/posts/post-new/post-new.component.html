@@ -1,66 +1,60 @@
-<!-- post-edit.component.html -->
 <div class="post-edit-container">
   <div class="container">
     <div class="card main-content-card">
 
       <div class="integrated-header d-flex justify-content-between align-items-center flex-wrap">
         <h2 class="header-title mb-0">
-          <i class="fas fa-edit"></i>
-          Editar Publicación
+          <i class="fas fa-plus"></i>
+          Nueva Publicación
         </h2>
       </div>
 
       <!-- Loading -->
-      @if (loading && !postForm.value.title) {
+      @if (loading) {
         <div class="loading-section">
           <div class="spinner-border text-primary mb-3" role="status">
             <span class="visually-hidden">Cargando...</span>
           </div>
           <div>
             <i class="fas fa-hourglass-half me-2"></i>
-            Cargando datos de la publicación...
+            Guardando publicación...
           </div>
-        </div>
-      }
-
-      <!-- Error State -->
-      @if (error && !loading) {
-        <div class="error-state">
-          <div class="error-icon">
-            <i class="fas fa-exclamation-triangle"></i>
-          </div>
-          <h4 class="mb-3 text-danger">Error al cargar</h4>
-          <p class="mb-4">{{ error }}</p>
-          <button class="btn btn-outline-primary" (click)="goBack()">
-            <i class="fas fa-arrow-left me-2"></i>
-            Volver al listado
-          </button>
         </div>
       }
 
       <!-- Form Section -->
-      @if (!loading || postForm.value.title) {
-            <div class="form-section">
+      @if (!loading) {
+        <div class="form-section">
           <form [formGroup]="postForm" (ngSubmit)="onSubmit()" novalidate>
 
             <!-- User ID Field -->
             <div class="form-group">
               <label for="userId" class="form-label">
                 <i class="fas fa-user me-2"></i>
-                Usuario ID
+                Usuario
+                <span class="required">*</span>
               </label>
               <div class="input-wrapper">
-                <input 
-                  type="number" 
-                  id="userId" 
+                <select
+                  id="userId"
                   class="form-control"
                   formControlName="userId"
-                  placeholder="Ingrese el ID del usuario"
-                  min="1">
+                  [disabled]="usersLoading || loading">
+                  <option value="">Seleccione un usuario</option>
+                  <option *ngFor="let user of users" [value]="user.id">
+                     {{ user.id }} - {{ user.name }} 
+                  </option>
+                </select>
                 <div class="input-icon">
                   <i class="fas fa-user"></i>
                 </div>
               </div>
+              @if (postForm.get('userId')?.invalid && (postForm.get('userId')?.touched || postForm.get('userId')?.dirty)) {
+                <div class="invalid-feedback">
+                  <i class="fas fa-exclamation-circle me-1"></i>
+                  El usuario es obligatorio.
+                </div>
+              }
             </div>
 
             <!-- Title Field -->
@@ -151,7 +145,7 @@
                     Guardando...
                   } @else {
                     <i class="fas fa-save me-1"></i>
-                    Guardar Cambios
+                    Crear Publicación
                   }
                 </button>
               </div>

@@ -61,7 +61,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   onCreateNew(): void {
-    alert('Navegando al formulario de creación');
+    this.ruta.navigate(['/new-post/']);
   }
 
   onDelete(postId: number): void {
@@ -102,10 +102,6 @@ export class PostListComponent implements OnInit, OnDestroy {
           alert('Error al eliminar la publicación. Por favor, intenta de nuevo.');
         }
       });
-  }
-
-  onRefresh(): void {
-    this.loadPosts();
   }
 
   onBackdropClick(event: Event): void {
