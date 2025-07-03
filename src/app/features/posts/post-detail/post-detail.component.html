@@ -1,0 +1,101 @@
+<!-- post-detail.component.html -->
+<div class="post-detail-container">
+  <div class="container">
+    <!-- Card principal -->
+    <div class="card main-content-card">
+      <div class="integrated-header d-flex align-items-center flex-wrap gap-2">
+        <button class="btn btn-back" (click)="goBack()">
+          <i class="fas fa-arrow-left me-1"></i>
+        </button>
+        <h2 class="header-title">
+          Detalle de Publicación
+        </h2>
+      </div>
+
+      <!-- Loading State -->
+      @if (loading) {
+      <div class="loading-section">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <div>
+          <i class="fas fa-hourglass-half me-2"></i>
+          Cargando publicación...
+        </div>
+      </div>
+      }
+
+      <!-- Error State -->
+      @if (error && !loading) {
+      <div class="error-section">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="error-title">Error al cargar</h3>
+        <p class="error-message">{{ error }}</p>
+        <button class="btn btn-retry">
+          <i class="fas fa-redo me-2"></i>
+          Reintentar
+        </button>
+      </div>
+      }
+
+      <!-- Post Content -->
+      @if (post && !loading && !error) {
+      <div class="post-content-section">
+        <!-- Post Meta Information -->
+        <div class="post-meta">
+          <div class="meta-item">
+            <i class="fas fa-hashtag"></i>
+            <span>ID:</span>
+            <span class="meta-value">{{ post.id }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-user"></i>
+            <span>Usuario:</span>
+            <span class="meta-value">{{ post.userId }}</span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-text-width"></i>
+            <span>Titulo:</span>
+            <span class="meta-value">
+              {{ titleLength }} caracteres
+            </span>
+          </div>
+          <div class="meta-item">
+            <i class="fas fa-align-left"></i>
+            <span>Body:</span>
+            <span class="meta-value">
+              {{ bodyLength }} caracteres
+            </span>
+          </div>
+        </div>
+
+        <!-- Post Title Section -->
+        <div class="post-title-section">
+          <h1 class="post-title">
+            {{ post.title }}
+          </h1>
+        </div>
+
+        <!-- Post Body Section -->
+        <div class="post-body-section">
+          <div class="body-content">
+            <div class="content-text">
+              {{ post.body }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Section -->
+      <div class="action-section">
+        <button class="btn btn-edit">
+          <i class="fas fa-edit me-2"></i>
+          Editar publicación
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>

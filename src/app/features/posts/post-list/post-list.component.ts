@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, map } from 'rxjs';
 import { Post } from '../../../core/interfaces/post.interface';
 import { PostService } from '../../../core/services/posts/post.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-list',
@@ -21,7 +22,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   postToDelete: Post | null = null;
   isDeleting = false;
 
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService, private ruta: Router) { }
 
   ngOnInit(): void {
     this.loadPosts();
@@ -52,8 +53,8 @@ export class PostListComponent implements OnInit, OnDestroy {
       });
   }
 
-  onView(post: Post): void {
-    alert(`Navegando al detalle del post: ${post.title}`);
+  onView(id: Post["id"]) {
+    return this.ruta.navigate(['/detalles-posts/' + id]);
   }
 
   onEdit(post: Post): void {
