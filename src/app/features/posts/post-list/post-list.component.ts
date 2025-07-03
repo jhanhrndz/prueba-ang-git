@@ -17,7 +17,6 @@ export class PostListComponent implements OnInit, OnDestroy {
   loading = false;
   private destroy$ = new Subject<void>();
 
-  // Propiedades para el modal de confirmación
   showDeleteModal = false;
   postToDelete: Post | null = null;
   isDeleting = false;
@@ -54,18 +53,17 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 
   onView(id: Post["id"]) {
-    return this.ruta.navigate(['/detalles-posts/' + id]);
+    return this.ruta.navigate(['/detail-posts/' + id]);
   }
 
-  onEdit(post: Post): void {
-    alert(`Editando: ${post.title}`);
+  onEdit(id: Post["id"]){
+    return this.ruta.navigate(['/edit-posts/' + id]);
   }
 
   onCreateNew(): void {
     alert('Navegando al formulario de creación');
   }
 
-  // Método modificado para mostrar el modal
   onDelete(postId: number): void {
     const post = this.posts.find(p => p.id === postId);
     if (post) {
@@ -74,14 +72,12 @@ export class PostListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Confirmar eliminación
   confirmDelete(): void {
     if (this.postToDelete) {
       this.deletePost(this.postToDelete.id);
     }
   }
 
-  // Cancelar eliminación
   cancelDelete(): void {
     this.showDeleteModal = false;
     this.postToDelete = null;
@@ -112,7 +108,6 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.loadPosts();
   }
 
-  // Método para cerrar modal al hacer clic en el backdrop
   onBackdropClick(event: Event): void {
     if (event.target === event.currentTarget && !this.isDeleting) {
       this.cancelDelete();
@@ -120,5 +115,4 @@ export class PostListComponent implements OnInit, OnDestroy {
   }
 }
 
-// Export default para lazy loading
 export default PostListComponent;

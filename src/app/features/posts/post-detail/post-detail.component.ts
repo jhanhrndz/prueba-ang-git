@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from '../../../core/services/posts/post.service';
 import { Post } from '../../../core/interfaces/post.interface';
@@ -19,7 +19,8 @@ export class PostDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private postService: PostService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -41,15 +42,11 @@ export class PostDetailComponent implements OnInit {
     });
   }
 
-  get titleLength(): number {
-    return this.post?.title.length ?? 0;
-  }
-
-  get bodyLength(): number {
-    return this.post?.body.length ?? 0;
-  }
-
   goBack(): void {
-    this.router.navigate(['/listar-posts']);
+    this.location.back();
+  }
+
+  onEdit(id: Post["id"]){
+    this.router.navigate(['/edit-posts/' + id]);
   }
 }

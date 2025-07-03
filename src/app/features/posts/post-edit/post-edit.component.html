@@ -1,0 +1,179 @@
+<!-- post-edit.component.html -->
+<div class="post-edit-container">
+  <div class="container">
+    <div class="card main-content-card">
+
+      <div class="integrated-header d-flex justify-content-between align-items-center flex-wrap">
+        <h2 class="header-title mb-0">
+          <i class="fas fa-edit"></i>
+          Editar Publicación
+        </h2>
+      </div>
+
+      <!-- Loading -->
+      @if (loading && !postForm.value.title) {
+        <div class="loading-section">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <div>
+            <i class="fas fa-hourglass-half me-2"></i>
+            Cargando datos de la publicación...
+          </div>
+        </div>
+      }
+
+      <!-- Error State -->
+      @if (error && !loading) {
+        <div class="error-state">
+          <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <h4 class="mb-3 text-danger">Error al cargar</h4>
+          <p class="mb-4">{{ error }}</p>
+          <button class="btn btn-outline-primary" (click)="goBack()">
+            <i class="fas fa-arrow-left me-2"></i>
+            Volver al listado
+          </button>
+        </div>
+      }
+
+      <!-- Form Section -->
+      @if (!loading || postForm.value.title) {
+            <div class="form-section">
+          <form [formGroup]="postForm" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- User ID Field -->
+            <div class="form-group">
+              <label for="userId" class="form-label">
+                <i class="fas fa-user me-2"></i>
+                Usuario ID
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  type="number" 
+                  id="userId" 
+                  class="form-control"
+                  formControlName="userId"
+                  placeholder="Ingrese el ID del usuario"
+                  min="1">
+                <div class="input-icon">
+                  <i class="fas fa-user"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Title Field -->
+            <div class="form-group">
+              <label for="title" class="form-label">
+                <i class="fas fa-heading me-2"></i>
+                Título de la Publicación
+                <span class="required">*</span>
+              </label>
+              <div class="input-wrapper">
+                <input 
+                  type="text" 
+                  id="title" 
+                  class="form-control"
+                  formControlName="title"
+                  placeholder="Ingrese el título de la publicación"
+                  [class.is-invalid]="title?.invalid && (title?.touched || title?.dirty)"
+                  [class.is-valid]="title?.valid && (title?.touched || title?.dirty)">
+                <div class="input-icon">
+                  <i class="fas fa-quote-left"></i>
+                </div>
+              </div>
+              @if (title?.invalid && (title?.touched || title?.dirty)) {
+                <div class="invalid-feedback">
+                  @if (title?.errors?.['required']) {
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    El título es obligatorio.
+                  }
+                  @if (title?.errors?.['minlength']) {
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    El título debe tener al menos 5 caracteres.
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Body Field -->
+            <div class="form-group">
+              <label for="body" class="form-label">
+                <i class="fas fa-align-left me-2"></i>
+                Contenido de la Publicación
+                <span class="required">*</span>
+              </label>
+              <div class="textarea-wrapper">
+                <textarea 
+                  id="body" 
+                  rows="6" 
+                  class="form-control"
+                  formControlName="body"
+                  placeholder="Escriba el contenido de la publicación aquí..."
+                  [class.is-invalid]="body?.invalid && (body?.touched || body?.dirty)"
+                  [class.is-valid]="body?.valid && (body?.touched || body?.dirty)"></textarea>
+                <div class="textarea-icon">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+              </div>
+              @if (body?.invalid && (body?.touched || body?.dirty)) {
+                <div class="invalid-feedback">
+                  @if (body?.errors?.['required']) {
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    El contenido es obligatorio.
+                  }
+                  @if (body?.errors?.['minlength']) {
+                    <i class="fas fa-exclamation-circle me-1"></i>
+                    El contenido debe tener al menos 10 caracteres.
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+              <div class="d-flex justify-content-end gap-3 flex-wrap">
+                <button 
+                  type="button" 
+                  class="btn btn-cancel" 
+                  (click)="goBack()"
+                  [disabled]="loading">
+                  <i class="fas fa-times me-1"></i>
+                  Cancelar
+                </button>
+                <button 
+                  type="submit" 
+                  class="btn btn-save" 
+                  [disabled]="postForm.invalid || loading">
+                  @if (loading) {
+                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    Guardando...
+                  } @else {
+                    <i class="fas fa-save me-1"></i>
+                    Guardar Cambios
+                  }
+                </button>
+              </div>
+            </div>
+
+          </form>
+
+          <!-- Error Alert -->
+          @if (error && !loading) {
+            <div class="alert alert-danger mt-4">
+              <div class="d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <div>
+                  <strong>Error:</strong> {{ error }}
+                </div>
+              </div>
+            </div>
+          }
+
+        </div>
+      }
+
+    </div>
+  </div>
+</div>
